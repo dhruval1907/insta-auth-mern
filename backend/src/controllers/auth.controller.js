@@ -1,5 +1,9 @@
 const userModel = require("../models/user.model")
 const crypto = require("crypto")
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const cookie = require("cookie-parser")
+
 
 async function registerUser(req, res) {
     const { email, password, bio, profileImage, username } = req.body
@@ -17,11 +21,19 @@ async function registerUser(req, res) {
         })
     }
 
-    const hash = crypto.createHash("sha256").update(password).digest("hex")
+    const hash = await bcrypt.hash(password, 10)
 
     const user = await userModel.create({
         email, username, bio, profileImage, password: hash
     })
+
+    const token = jwt.sign({
+        id: user._id,
+        email: user.email,
+        username: user.username
+    }, process.env.JWT_SECRET)
+
+    res.cookie("token", token)
 
     res.status(201).json({
         message: "user registered successfully",
@@ -29,7 +41,7 @@ async function registerUser(req, res) {
     })
 }
 
-async function loginUser (req, res) {
+async function loginUser(req, res) {
     const { username, password, email } = req.body
 
     const user = await userModel.findOne({
@@ -47,7 +59,7 @@ async function loginUser (req, res) {
 
     const hash = crypto.createHash("sha256").update(password).digest("hex")
 
-    const isPasswordMatched = hash == user.password
+    const isPasswordMatched = await bcrypt.compare(password, user.password)
 
     if (!isPasswordMatched) {
         return res.status(401).json({
@@ -55,13 +67,19 @@ async function loginUser (req, res) {
         })
     }
 
+    const token = jwt.sign({
+        id: user._id,
+    }, process.env.JWT_SECRET)
+
+    res.cookie("token", token)
+
     res.status(200).json({
         message: "user logged in",
         user: {
             emial: user.email,
             password: user.password,
             username: user.username
-        }
+        },
     })
 
 }

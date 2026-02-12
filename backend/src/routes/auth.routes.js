@@ -4,7 +4,7 @@ const authController = require("../controllers/auth.controller")
 // const userModel = require("../models/user.model")
 
 authRouter.post("/register", authController.registerUser)
-authRouter.post("/login", authController.loginUser)
+authRouter.post("/login", authController.loginUser  )
 
 
 
