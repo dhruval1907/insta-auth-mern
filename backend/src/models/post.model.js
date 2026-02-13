@@ -5,9 +5,9 @@ const postSchema = mongoose.Schema({
         type: String,
         default: ""
     },
-    imgUrl: {
+    imageUrl: {
         type: String,
-        unique: true
+        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

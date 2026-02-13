@@ -15,9 +15,7 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    bio: {
-        type: String
-    },
+    bio: String,
     profileImage: {
         type: String,
         default: "https://ik.imagekit.io/hnoglyswo0/avatar-gender-neutral-silhouette-vector-600nw-2470054311.webp"
