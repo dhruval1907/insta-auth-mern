@@ -5,17 +5,18 @@ const postSchema = mongoose.Schema({
         type: String,
         default: ""
     },
-    imageUrl: {
+    imgUrl: {
         type: String,
-        // required: true
+        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: true
+        ref: "users"
     }
 })
 
 const postModel = mongoose.model("posts", postSchema)
 
 module.exports = postModel
+
+
