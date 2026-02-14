@@ -18,7 +18,7 @@ async function registerUser(req, res) {
             message: "user already exits"
         })
     }
-    const hash = bcrypt.hash(password, 10)
+    const hash = await bcrypt.hash(password, 10)
 
     const user = await userModel.create({
         email, bio, password: hash, profileImage, username
@@ -37,9 +37,53 @@ async function registerUser(req, res) {
 
 }
 
+async function loginUser(req, res) {
+
+    const { username, password, email } = req.body
+
+    const user = await userModel.findOne({
+        $or: [
+            { username }, { email }
+        ]
+    })
+
+    if (!user) {
+        return res.status(401).json({
+            message: "unauthorized access"
+        })
+    }
+
+    const isPasswordInvalid = await bcrypt.compare(password, user.password)
+
+    if (!isPasswordInvalid) {
+        return res.status(401).json({
+            message: "unauthorized accesss"
+        })
+    }
+
+    const token = jwt.sign({
+        id: user._id
+    }, process.env.JWT_SECRET, { expiresIn: "1d" })
+
+    res.cookie("token", token)
+
+
+    res.status(200)
+        .json({
+            message: "User loggedIn successfully.",
+            user: {
+                username: user.username,
+                email: user.email,
+                bio: user.bio,
+                profileImage: user.profileImage
+            }
+        })
+
+}
+
 
 module.exports = {
-    registerUser
+    registerUser, loginUser
 }
 
 // const userModel = require("../models/user.model")
