@@ -233,5 +233,4 @@ This project demonstrates how to build a **real-world social media application u
 
 Your Name
 
-GitHub:
-LinkedIn:
+GitHub:dhruval1907
