@@ -7,4 +7,8 @@ const identifyUser = require("../middlewares/auth.middleware")
 userRouter.post("/follow/:username", identifyUser, userController.followUserController)
 
 
+userRouter.post("/unfollow/:username", identifyUser, userController.unfollowUserController)
+
+
+
 module.exports = userRouter     

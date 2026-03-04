@@ -71,6 +71,10 @@ async function getAllDataPost(req, res) {
 
 }
 
+async function likePostController(req, res) {
+    
+}
+
 module.exports = {
     createPostController,
     getUserPost,

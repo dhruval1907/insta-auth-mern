@@ -1,4 +1,5 @@
 const followModel = require("../models/follow.model")
+const userModel = require("../models/user.model")
 
 async function followUserController(req, res) {
 
@@ -17,6 +18,17 @@ async function followUserController(req, res) {
         { upsert: true, returnDocument: 'after' }
     )
 
+    const isFollowExists = await userModel.findOne({
+        username: followeeUsername
+    })
+
+    if (!isFollowExists) {
+        return res.status(404).json({
+            message: "user not found"
+        })
+    }
+
+
     const followeeRecord = await followModel.findOneAndUpdate(
         { username: followeeUsername },
         { $push: { followers: followerUsername } },
@@ -31,7 +43,8 @@ async function followUserController(req, res) {
 
     if (isAlrteadyFollowing) {
         return res.status(200).json({
-            message: "you are already following this user"
+            message: "you are already following this user",
+            follow: followeeRecord
         })
     }
 
@@ -42,7 +55,30 @@ async function followUserController(req, res) {
 }
 
 
+async function unfollowUserController(req, res) {
+    const followerUsername = req.user.username
+    const followeeUsername = req.params.username
+
+    const isUserFollowing = await followModel.findOne({
+        follower: followerUsername,
+        followee: followeeUsername
+    })
+
+    if (!isUserFollowing) {
+        return res.status(200).json({
+            message: "you are not following this user"
+        })
+    }
+
+    await followModel.findByIdAndDelete(isUserFollowing._id)
+
+    res.status(200).json({
+        message: "you have unfollowed this user"
+    })
+}
+
 
 module.exports = {
-    followUserController
+    followUserController,
+    unfollowUserController
 }   

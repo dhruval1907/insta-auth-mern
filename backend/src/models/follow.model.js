@@ -16,6 +16,10 @@ const followSchema = mongoose.Schema({
     timestamps: true
 })
 
+followSchema.index({
+    follower: 1,
+    following: 1
+}, { unique: true })
 
 const followModel = mongoose.model("follow", followSchema)
 
