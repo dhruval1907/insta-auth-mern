@@ -11,19 +11,29 @@ async function followUserController(req, res) {
         })
     }
 
-    // Add followee to follower's following list
     const followerRecord = await followModel.findOneAndUpdate(
         { username: followerUsername },
         { $push: { following: followeeUsername } },
         { upsert: true, returnDocument: 'after' }
     )
 
-    // Add follower to followee's followers list
     const followeeRecord = await followModel.findOneAndUpdate(
         { username: followeeUsername },
         { $push: { followers: followerUsername } },
         { upsert: true, returnDocument: 'after' }
     )
+
+    const isAlrteadyFollowing = await followModel.findOne({
+        follower: followerUsername,
+        followee: followeeUsername
+    })
+
+
+    if (isAlrteadyFollowing) {
+        return res.status(200).json({
+            message: "you are already following this user"
+        })
+    }
 
     res.status(201).json({
         message: "you are now following the user ",
@@ -35,4 +45,4 @@ async function followUserController(req, res) {
 
 module.exports = {
     followUserController
-}
+}   
