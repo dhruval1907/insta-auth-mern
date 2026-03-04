@@ -7,4 +7,4 @@ const identifyUser = require("../middlewares/auth.middleware")
 userRouter.post("/follow/:username", identifyUser, userController.followUserController)
 
 
-module.exports = userRouter
+module.exports = userRouter     
