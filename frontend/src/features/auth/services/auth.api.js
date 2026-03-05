@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function registeruser(email, username, password) {
     try {
-        const response = axios.post("http://localhost:3000/api/auth/register", {
+        const response = await axios.post("http://localhost:3000/api/auth/register", {
             email,
             username,
             password
@@ -16,26 +16,29 @@ export async function registeruser(email, username, password) {
     }
 }
 
-export async function logineruser(email, username, password) {
+export async function logineruser(username, email, password) {
+
     try {
+
         const response = await axios.post(
             "http://localhost:3000/api/auth/login",
             {
                 username,
                 email,
-                password,
+                password
             },
             {
-                withCredentials: true,
+                withCredentials: true
             }
         );
 
         return response.data
-    } catch (error) {
-        console.log(error.response?.data);
-    }
-}
 
+    } catch (error) {
+        console.log(error);
+    }
+
+}
 export async function getMe() {
     try {
         const response = await axios.post(

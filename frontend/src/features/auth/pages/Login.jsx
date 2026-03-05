@@ -4,9 +4,15 @@ import VanillaTilt from "vanilla-tilt";
 import { Link } from "react-router-dom";
 import { TbLockPassword } from "react-icons/tb";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
+
+
+  const { handleLogin } = useAuth()
+
   const tiltRef = useRef(null);
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -29,8 +35,14 @@ const Login = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    
+    handleLogin(username,password)
+    .then((res)=>{
+      console.log(res);
+    })
+
   }
+
+  // if(loading)
 
   return (
     <div>
@@ -41,7 +53,7 @@ const Login = () => {
           <br /><br />
 
           <form onSubmit={handleSubmit}>
-            
+
             <input
               type="text"
               placeholder="Enter username"

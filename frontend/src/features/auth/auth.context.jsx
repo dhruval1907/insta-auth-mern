@@ -8,18 +8,24 @@ export default function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const handleLogin = async (email, password) => {
-        setLoading(true);
+    const handleLogin = async (username, email, password) => {
+
+        setLoading(true)
 
         try {
-            const response = await logineruser(email, password);
-            setUser(response.user);
+
+            const response = await logineruser(username, email, password)
+
+            if (response) {
+                setUser(response.user)
+            }
+
         } catch (err) {
-            console.log(err);
+            console.log(err)
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     const handleRegister = async (username, email, password) => {
 
