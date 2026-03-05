@@ -38,64 +38,72 @@ async function registerUser(req, res) {
     })
 
 }
-
 async function loginUser(req, res) {
-    try {
 
-        const { email, password } = req.body
+    const { username, password, email } = req.body
 
-        // check if user exists
-        const user = await userModel.findOne({ email })
+    const user = await userModel.findOne({
+        $or: [
+            { username },
+            { email }
+        ]
+    })
 
-        if (!user) {
-            return res.status(401).json({
-                message: "User not found"
-            })
-        }
-
-        // check password
-        const isPasswordValid = await bcrypt.compare(password, user.password)
-
-        if (!isPasswordValid) {
-            return res.status(401).json({
-                message: "Invalid password"
-            })
-        }
-
-        // create token
-        const token = jwt.sign(
-            {
-                id: user._id,
-                username: user.username
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: "1d" }
-        )
-
-        // send cookie
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: false
-        })
-
-        res.status(200).json({
-            message: "User logged in successfully",
-            user: {
-                username: user.username,
-                email: user.email,
-                bio: user.bio,
-                profileImage: user.profileImage
-            }
-        })
-
-    } catch (error) {
-        res.status(500).json({
-            message: "Server error",
-            error
+    if (!user) {
+        return res.status(401).json({
+            message: "unauthorized access"
         })
     }
+
+    // const isPasswordInvalid = await bcrypt.compare(password, user.password)
+
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+
+    if (!isPasswordValid) {
+        return res.status(401).json({
+            message: "invalid password"
+        })
+    }
+
+    const token = jwt.sign(
+        {
+            id: user._id,
+            username: user.username
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+    )
+
+    res.cookie("token", token)
+
+    res.status(200).json({
+        message: "User loggedIn successfully.",
+        user: {
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            profileImage: user.profileImage
+        }
+    })
+}
+async function getMecontroller(req, res) {
+
+    const userId = req.user.id
+
+    const user = await userModel.findById(userId)
+
+
+    res.status(200).json({
+        user: {
+            username: user.username,
+            email: user.email,
+            bio: user.bio,
+            profileImage: user.profileImage
+        }
+    })
+
 }
 
 module.exports = {
-    registerUser, loginUser
+    registerUser, loginUser, getMecontroller
 }

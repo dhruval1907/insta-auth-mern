@@ -29,23 +29,7 @@ const Login = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    try {
-      const res = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        {
-          username,
-          email,
-          password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
-      console.log(res.data);
-    } catch (error) {
-      console.log(error.response?.data);
-    }
+    
   }
 
   return (
