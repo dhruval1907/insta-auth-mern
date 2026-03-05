@@ -2,6 +2,7 @@ const postModel = require("../models/post.model")
 const jwt = require("jsonwebtoken")
 const ImageKit = require("@imagekit/nodejs")
 const { toFile } = require("@imagekit/nodejs")
+const likeModel = require("../models/like.model")
 
 
 const imageKit = new ImageKit({
@@ -11,7 +12,7 @@ const imageKit = new ImageKit({
 async function createPostController(req, res) {
     const file = await imageKit.files.upload({
         file: await toFile(Buffer.from(req.file.buffer), 'file'),
-        fileName: 'test',
+        fileName: 'image',
         folder: "instaclone-post"
     })
 
@@ -72,12 +73,34 @@ async function getAllDataPost(req, res) {
 }
 
 async function likePostController(req, res) {
-    
+
+    const username = req.user.username
+    const postId = req.params.postId
+
+    const post = await postModel.findById(postId)
+
+    if (!post) {
+        return res.status(404).json({
+            message: "post not found"
+        })
+    }
+
+    const like = await likeModel.create({
+        post: postId,
+        user: username
+    })
+
+    res.status(200).json({
+        message: "post like successfully",
+        like
+    })
+
 }
 
 module.exports = {
     createPostController,
     getUserPost,
-    getAllDataPost
+    getAllDataPost,
+    likePostController
 }
 
