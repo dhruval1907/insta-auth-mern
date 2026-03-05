@@ -1,25 +1,51 @@
-import React, { useEffect, useRef, useState } from 'react'
-import "../style/form.scss"
-import VanillaTilt from 'vanilla-tilt'
+import React, { useEffect, useRef, useState } from "react";
+import "../style/form.scss";
+import VanillaTilt from "vanilla-tilt";
 import { Link } from "react-router-dom";
 import { TbLockPassword } from "react-icons/tb";
+import axios from "axios";
 
 const Login = () => {
+  const tiltRef = useRef(null);
 
-  const tiltRef = useRef(null)
-  const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     VanillaTilt.init(tiltRef.current, {
       max: 25,
       speed: 400,
       glare: true,
-      "max-glare": 0.5
-    })
-  }, [])
+      "max-glare": 0.5,
+    });
+  }, []);
 
   const togglePassword = () => {
-    setShowPassword(!showPassword)
+    setShowPassword(!showPassword);
+  };
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        {
+          username,
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      console.log(res.data);
+    } catch (error) {
+      console.log(error.response?.data);
+    }
   }
 
   return (
@@ -30,37 +56,58 @@ const Login = () => {
 
           <br /><br />
 
-          <form>
-            <input type="text" placeholder="Enter username" />
+          <form onSubmit={handleSubmit}>
+            
+            <input
+              type="text"
+              placeholder="Enter username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+
             <br /><br />
 
-            <div className='main'>
+            <input
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <br /><br />
+
+            <div className="main">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
-              <div className='icon' onClick={togglePassword} style={{cursor:"pointer"}}>
+              <div
+                className="icon"
+                onClick={togglePassword}
+                style={{ cursor: "pointer" }}
+              >
                 <TbLockPassword />
               </div>
             </div>
 
-            <br /><br /><br />
+            <br />
 
-            <button>Login</button>
+            <button type="submit">Login</button>
           </form>
 
-          <br /><br />
+          <br />
 
-          <p className='para'>
-            have not account?
-            <Link to="/register"> reg </Link>
+          <p className="para">
+            Have not account?
+            <Link to="/register"> Register </Link>
           </p>
-
         </div>
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

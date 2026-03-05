@@ -31,8 +31,8 @@ const Register = () => {
         e.preventDefault()
 
         axios.post("http://localhost:3000/api/auth/register", {
-            username,
             email,
+            username,
             password
         }, {
             withCredentials: true
@@ -56,14 +56,14 @@ const Register = () => {
 
                         <input
                             onInput={(e) => {
-                                setemail(e.target.value)
+                                setusername(e.target.value)
                             }}
                             type="text" placeholder="Enter username" />
                         <br /><br />
 
                         <input
                             onInput={(e) => {
-                                setusername(e.target.value)
+                                setemail(e.target.value)
                             }}
                             type="email" placeholder="Enter email" />
                         <br /><br />

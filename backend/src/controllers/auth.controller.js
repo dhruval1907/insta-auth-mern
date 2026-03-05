@@ -40,39 +40,46 @@ async function registerUser(req, res) {
 }
 
 async function loginUser(req, res) {
+    try {
 
-    const { username, password, email } = req.body
+        const { email, password } = req.body
 
-    const user = await userModel.findOne({
-        $or: [
-            { username }, { email }
-        ]
-    })
+        // check if user exists
+        const user = await userModel.findOne({ email })
 
-    if (!user) {
-        return res.status(401).json({
-            message: "unauthorized access"
+        if (!user) {
+            return res.status(401).json({
+                message: "User not found"
+            })
+        }
+
+        // check password
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                message: "Invalid password"
+            })
+        }
+
+        // create token
+        const token = jwt.sign(
+            {
+                id: user._id,
+                username: user.username
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        )
+
+        // send cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false
         })
-    }
 
-    const isPasswordInvalid = await bcrypt.compare(password, user.password)
-
-    if (!isPasswordInvalid) {
-        return res.status(401).json({
-            message: "unauthorized accesss"
-        })
-    }
-
-    const token = jwt.sign({
-        id: user._id,
-        username: user.username
-    }, process.env.JWT_SECRET, { expiresIn: "1d" })
-
-    res.cookie("token", token)
-
-    res.status(200)
-        .json({
-            message: "User loggedIn successfully.",
+        res.status(200).json({
+            message: "User logged in successfully",
             user: {
                 username: user.username,
                 email: user.email,
@@ -81,8 +88,13 @@ async function loginUser(req, res) {
             }
         })
 
+    } catch (error) {
+        res.status(500).json({
+            message: "Server error",
+            error
+        })
+    }
 }
-
 
 module.exports = {
     registerUser, loginUser
