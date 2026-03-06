@@ -101,6 +101,9 @@ async function likePostController(req, res) {
 
 async function getFeedController(req, res) {
     const posts = await postModel.find().populate("user")
+        .map(async (post) => {
+
+        })
 
 
     res.status(200).json({
