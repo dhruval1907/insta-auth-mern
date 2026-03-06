@@ -44,6 +44,14 @@ const Login = () => {
 
   }
 
+  if (loading) {
+    return (<main>
+      <h1 style={{ color: "black" }}>Loading....</h1>
+    </main>)
+  }
+
+
+
   return (
     <div>
       <main>
