@@ -4,6 +4,9 @@ import VanillaTilt from 'vanilla-tilt'
 import { Link } from "react-router-dom";
 import { TbLockPassword } from "react-icons/tb";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+
 
 const Register = () => {
 
@@ -27,10 +30,25 @@ const Register = () => {
         setShowPassword(!showPassword)
     }
 
-    async function handleSubmit(e) {
+    const navigate = useNavigate()
+
+    const { loading, handleRegister } = useAuth()
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
-      
+        await handleRegister(username, email, password)
+
+        navigate("/")
+
+        console.log("user registered");
+
+    }
+
+    if (loading) {
+        return (<main>
+            <h1>Loading......</h1>
+        </main>)
     }
 
     return (

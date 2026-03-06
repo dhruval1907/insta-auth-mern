@@ -20,6 +20,7 @@ export const useAuth = () => {
         setLoading(false)
     }
 
+
     const handleRegister = async (username, email, password) => {
 
         setLoading(true);
@@ -30,6 +31,7 @@ export const useAuth = () => {
 
         setLoading(false);
     }
+        
 
     return {
         user, loading, handleLogin, handleRegister
