@@ -5,13 +5,16 @@ import { Link } from "react-router-dom";
 import { TbLockPassword } from "react-icons/tb";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 
 
-  const { handleLogin } = useAuth()
+  const { handleLogin, user, loading } = useAuth()
 
   const tiltRef = useRef(null);
+
+  const navigate = useNavigate()
 
 
   const [email, setEmail] = useState("");
@@ -35,14 +38,11 @@ const Login = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    handleLogin(username,password)
-    .then((res)=>{
-      console.log(res);
-    })
+    await handleLogin(username, email, password)
+
+    navigate("/")
 
   }
-
-  // if(loading)
 
   return (
     <div>
