@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken")
 const ImageKit = require("@imagekit/nodejs")
 const { toFile } = require("@imagekit/nodejs")
 const likeModel = require("../models/like.model")
-
+const userModel = require("../models/user.model")
 
 const imageKit = new ImageKit({
     privateKey: process.env.IMAGEKIT_PRIVATE_KEY
@@ -19,7 +19,9 @@ async function createPostController(req, res) {
     const post = await postModel.create({
         caption: req.body.caption,
         imgUrl: file.url,
-        user: req.user.id
+        user: req.user.id,
+        bio: req.user.bio,
+        profilImage: req.user.profileImage
     })
 
     res.status(201).json({
@@ -97,10 +99,20 @@ async function likePostController(req, res) {
 
 }
 
+async function getFeedController(req, res) {
+    const posts = await postModel.find().populate("user")
+
+
+    res.status(200).json({
+        message: "message post fethced successfully",
+        posts
+    })
+}
+
 module.exports = {
     createPostController,
     getUserPost,
     getAllDataPost,
-    likePostController
+    likePostController,
+    getFeedController
 }
-

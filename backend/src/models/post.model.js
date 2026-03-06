@@ -11,11 +11,11 @@ const postSchema = mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "users"
+        ref: "user"
     }
 })
 
-const postModel = mongoose.model("posts",postSchema)
+const postModel = mongoose.model("posts", postSchema)
 
 module.exports = postModel
 

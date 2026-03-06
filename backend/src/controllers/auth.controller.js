@@ -47,7 +47,7 @@ async function loginUser(req, res) {
             { username },
             { email }
         ]
-    })
+    }).select("+password")
 
     if (!user) {
         return res.status(401).json({
