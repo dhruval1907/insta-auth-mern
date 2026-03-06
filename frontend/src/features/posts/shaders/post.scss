@@ -1,0 +1,70 @@
+main {
+    height: 100%;
+    width: 100%;
+    // background: linear-gradient(to top, rgb(205, 41, 73), rgb(166, 138, 138));
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .feed {
+        height: 95vh;
+        width: 30vw;
+        // background-color: rgb(120, 114, 114);
+        padding: 2rem 0px;
+        overflow-y: auto;
+
+
+        .posts {
+            height: 100%;
+            width: 100%;
+            // background-color: red;
+        }
+
+        .post {
+            height: 70vh;
+            width: 100%;
+            background-color: black;
+            border-bottom: 5px solid white;
+            text-align: center;
+            margin-top: 1rem;
+
+            .main-image {
+                height: 75%;
+                width: 80%;
+                object-fit: cover;
+                border-radius: 10px;
+                margin-bottom: 1rem;
+            }
+
+            .icon {
+                height: 40px;
+                width: 60%;
+                display: flex;
+                gap: 1rem;
+                font-size: 1.5rem;
+                padding-left: 3.4rem;
+                color: white;
+            }
+
+            .user {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1rem;
+                gap: 20px;
+
+                img {
+                    height: 40px;
+                    border-radius: 50%;
+                    width: 40px;
+                }
+            }
+        }
+
+        .bottom {
+            padding-left: 3.4rem;
+            text-align: left;
+        }
+    }
+
+}
