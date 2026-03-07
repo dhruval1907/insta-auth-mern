@@ -10,6 +10,7 @@ const Post = ({ post }) => {
 
     return (
         <div className="post">
+      
 
             <div className="user">
                 <img
@@ -29,7 +30,7 @@ const Post = ({ post }) => {
             <div className="bottom">
                 <p className="caption">{post?.caption}</p>
             </div>
-            <br /> 
+            <br />
 
             <div className="icon" >
                 <CiHeart
