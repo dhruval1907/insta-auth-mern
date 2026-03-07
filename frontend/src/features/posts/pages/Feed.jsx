@@ -4,7 +4,6 @@ import Post from '../components/Post';
 import { usePost } from "../hook/usePost";
 import Nav from "../../../components/Nav"
 
-
 const Feed = () => {
 
     const { feed, handleGetFeed } = usePost()

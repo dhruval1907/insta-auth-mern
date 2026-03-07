@@ -19,9 +19,7 @@ async function createPostController(req, res) {
     const post = await postModel.create({
         caption: req.body.caption,
         imgUrl: file.url,
-        user: req.user.id,
-        bio: req.user.bio,
-        profilImage: req.user.profileImage
+        user: req.user.id
     })
 
     res.status(201).json({
@@ -29,7 +27,7 @@ async function createPostController(req, res) {
         post
     })
 
-    console.log();
+    console.log(posts)
 
 }
 
@@ -100,27 +98,30 @@ async function likePostController(req, res) {
 }
 
 async function getFeedController(req, res) {
-    const posts = await postModel.find({}).sort({_id : 1}).populate("user").lean();
+
+    const posts = await postModel
+        .find()
+        .populate("user", "username profileImage")
+        .lean()
 
     const updatedPosts = await Promise.all(
         posts.map(async (post) => {
-            const isLiked = await likeModel.findOne({
-                user: req.user._id,
-                post: post._id
-            });
-            
-            post.isLiked = !!isLiked;
 
-            return post;
+            const isLiked = await likeModel.findOne({
+                user: req.user.username,
+                post: post._id
+            })
+
+            post.isLiked = !!isLiked
+            return post
         })
-    );
+    )
 
     res.status(200).json({
         message: "post fetched successfully",
         posts: updatedPosts
-    });
+    })
 }
-
 module.exports = {
     createPostController,
     getUserPost,

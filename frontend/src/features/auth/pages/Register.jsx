@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { use, useEffect, useRef, useState } from 'react'
 import "../style/reg.scss"
 import VanillaTilt from 'vanilla-tilt'
 import { Link } from "react-router-dom";
@@ -37,7 +37,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        await handleRegister(username, email, password)
+        await handleRegister(email, username, password)
 
         navigate("/login")
 

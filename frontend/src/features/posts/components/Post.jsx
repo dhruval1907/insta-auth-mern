@@ -10,7 +10,7 @@ const Post = ({ post }) => {
 
     return (
         <div className="post">
-      
+
 
             <div className="user">
                 <img
