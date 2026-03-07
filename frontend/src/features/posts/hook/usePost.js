@@ -9,12 +9,17 @@ export const usePost = () => {
     const { loading, post, feed, setloading, setPost, setFeed } = context;
 
     const handleGetFeed = async () => {
-        setloading(true);
+        try {
+            setloading(true);
 
-        const data = await getFeed();
-        setFeed(data.posts);
+            const data = await getFeed();
+            setFeed(data.posts);
 
-        setloading(false);
+        } catch (error) {
+            console.error(error.response?.data || error.message);
+        } finally {
+            setloading(false);
+        }
     };
 
     return { loading, feed, post, handleGetFeed };

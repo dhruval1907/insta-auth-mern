@@ -15,6 +15,8 @@ main {
         overflow-y: auto;
 
 
+        
+
         .posts {
             height: 100%;
             width: 100%;
@@ -37,6 +39,10 @@ main {
                 margin-bottom: 1rem;
             }
 
+            .like{
+                background-color: red;
+            }
+
             .icon {
                 height: 40px;
                 width: 60%;
@@ -45,6 +51,8 @@ main {
                 font-size: 1.5rem;
                 padding-left: 3.4rem;
                 color: white;
+                display: flex;
+                align-items: center;
             }
 
             .user {

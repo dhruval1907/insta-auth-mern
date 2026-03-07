@@ -1,7 +1,8 @@
-import React from 'react'
-import { FcLike } from "react-icons/fc";
-import { FaRegComment } from "react-icons/fa6";
-import { IoMdShareAlt } from "react-icons/io";
+import React from "react"
+import { CiHeart } from "react-icons/ci"
+import { FaRegComment } from "react-icons/fa6"
+import { IoMdShareAlt } from "react-icons/io"
+import "../shaders/post.scss"
 
 const Post = ({ post }) => {
 
@@ -21,19 +22,22 @@ const Post = ({ post }) => {
             <img
                 src={post?.imgUrl}
                 alt="post"
-                className='main-image'
+                className="main-image"
             />
+            <br />
 
             <div className="bottom">
                 <p className="caption">{post?.caption}</p>
             </div>
+            <br /> 
 
-            <br />
-
-            <div className="icon">
-                <FcLike size={22} />
-                <FaRegComment size={20} />
-                <IoMdShareAlt size={22} />
+            <div className="icon" >
+                <CiHeart
+                    size={28}
+                    className={post?.isLiked ? "like" : "not"}
+                />
+                <FaRegComment size={22} />
+                <IoMdShareAlt size={25} />
             </div>
 
         </div>
